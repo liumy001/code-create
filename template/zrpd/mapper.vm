@@ -56,11 +56,22 @@
     </select>
 
     <!-- 保存对象 -->
-    <insert id="save" parameterType="${table.packageName}.entity.${table.className}Entity" useGeneratedKeys="true"
-            keyProperty="id">
+    <insert id="save" parameterType="${table.packageName}.entity.${table.className}Entity" useGeneratedKeys="true"  keyProperty="id">
         insert into ${table.tableName}
-        (#foreach( $tempColumn in $table.columnList)${tempColumn.columnRName}#if(!$foreach.last),#end#end)
-        values (#foreach( $tempColumn in $table.columnList)#{${tempColumn.fieldName}}#if(!$foreach.last),#end#end)
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #foreach( $tempColumn in $table.columnList)
+                <if test="${tempColumn.fieldName} != null">
+                    ${tempColumn.columnRName}
+                </if>
+            #end
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #foreach( $tempColumn in $table.columnList)
+                <if test="${tempColumn.fieldName} != null">
+                    #{${tempColumn.fieldName}}
+                </if>
+            #end
+        </trim>
     </insert>
 
     <!-- 更新对象 -->
