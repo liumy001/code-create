@@ -3,11 +3,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="${table.packageName}.${module}.dao.${table.className}Dao">
     <resultMap id="resultMap" type="${table.packageName}.entity.${table.className}Entity">
-        <id property="id" column="id" jdbcType="BIGINT"/>
         #foreach($tempColumn in $table.columnList)
-            #if(${tempColumn.columnName}!="id")
                 <result column="${tempColumn.columnRName}" property="${tempColumn.fieldName}"/>
-            #end
         #end
     </resultMap>
 
@@ -32,13 +29,6 @@
     </sql>
 
     <!-- 根据ID获取对象信息 -->
-    <select id="findById" resultMap="resultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="selectField"/>
-        from ${table.tableName}
-        where id = #{id}
-    </select>
-
     <select id="findByLogicCode" resultMap="resultMap" parameterType="java.lang.String">
         select
         <include refid="selectField"/>
@@ -56,7 +46,7 @@
     </select>
 
     <!-- 保存对象 -->
-    <insert id="save" parameterType="${table.packageName}.entity.${table.className}Entity" useGeneratedKeys="true"  keyProperty="id">
+    <insert id="save" parameterType="${table.packageName}.entity.${table.className}Entity">
         insert into ${table.tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
             #foreach( $tempColumn in $table.columnList)
