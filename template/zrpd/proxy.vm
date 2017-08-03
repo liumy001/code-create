@@ -1,0 +1,135 @@
+package ${table.packageName}.${module}.proxy;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
+
+import com.asura.framework.base.entity.DataTransferObject;
+import com.asura.framework.base.paging.PagingResult;
+import com.asura.framework.base.paging.SearchMap;
+import com.asura.framework.base.util.Check;
+import com.asura.framework.base.util.MessageSourceUtil;
+import com.asura.framework.dao.mybatis.paginator.domain.PageBounds;
+import com.asura.framework.utils.LogUtil;
+import ${table.packageName}.commons.constant.BaseConst;
+import ${table.packageName}.commons.util.ProxyUtil;
+import ${table.packageName}.commons.validate.ParamCheckLogic;
+import ${table.packageName}.commons.validate.ValidateResult;
+import ${table.packageName}.entity.${table.className}Entity;
+import ${table.packageName}.${module}.api.inner.${table.className}InnerService;
+import ${table.packageName}.${module}.api.outer.${table.className}OuterService;
+import ${table.packageName}.${module}.dto.request.${table.className}Request;
+import ${table.packageName}.${module}.service.${table.className}Service;
+
+/**
+ * ${table.className}业务代理类
+ * @author: ${author}
+ * @email:  ${mail}
+ * @date: ${nowDate}
+ * @since 1.0.0
+ */
+@Component("${module}.${table.className}ServiceProxy")
+public class ${table.className}ServiceProxy implements ${table.className}InnerService,${table.className}OuterService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(${table.className}ServiceProxy.class);
+
+    @Resource(name = "${module}.paramCheckLogic")
+    private ParamCheckLogic paramCheckLogic;
+
+    @Resource(name = "${module}.messageSource")
+    private MessageSource messageSource;
+
+    @Resource(name = "${module}.${table.classNameFirstLower}Service")
+    private ${table.className}Service ${table.classNameFirstLower}Service;
+
+    //@Resource(name = "${module}.${table.classNameFirstLower}Process")
+    //private ${table.className}Process ${table.classNameFirstLower}Process;
+
+    /**
+    * ${table.className}查询数据服务
+    * @author: ${author}
+    * @email:  ${mail}
+    * @date: ${nowDate}
+    * @since 1.0.0
+    */
+    public String findForPage(String json) {
+        DataTransferObject dto = null;
+        try {
+            // 参数check
+            ValidateResult<${table.className}Request> validateResult = paramCheckLogic.checkParamValidate(json, ${table.className}Request.class);
+            if (!validateResult.isSuccess()) {
+                return validateResult.getDto().toJsonString();
+            }
+            // 获取请求参数
+            ${table.className}Request request = validateResult.getResultObj();
+            SearchMap searchMap = new SearchMap();
+            //searchMap.put("cityCode", request.getCityCode());
+            //searchMap.put("logicCode", request.getLogicCode());
+
+            PageBounds pageBounds = new PageBounds(request.getPage(), request.getPageSize(), true);
+
+            PagingResult<${table.className}Entity> pagingResult = ${table.classNameFirstLower}Service.findForPage(pageBounds, searchMap);
+            dto = new DataTransferObject();
+            dto.putValue("data",pagingResult);
+            return dto.toJsonString();
+        } catch (Exception e) {
+            return ProxyUtil.returnError(LOGGER, e, messageSource).toJsonString();
+        }
+    }
+
+    /**
+    * ${table.className}更新数据服务
+    * @author: ${author}
+    * @email:  ${mail}
+    * @date: ${nowDate}
+    * @since 1.0.0
+    */
+    public String update${table.className}(String paramJSON) {
+        // 参数校验
+        ValidateResult<${table.className}Entity> validateResult = paramCheckLogic.checkParamValidate(paramJSON, ${table.className}Entity.class);
+        if (!validateResult.isSuccess()) {
+            return validateResult.getDto().toJsonString();
+        }
+
+        ${table.className}Entity updateRequest = validateResult.getResultObj();
+
+        // 更新数据
+        int updateCount = ${table.classNameFirstLower}Service.update(updateRequest);
+
+        // 返回结果
+        DataTransferObject dto = new DataTransferObject();
+        dto.putValue("data", updateCount);
+        return dto.toJsonString();
+    }
+
+    /**
+    * ${table.className}保存数据服务
+    * @author: ${author}
+    * @email:  ${mail}
+    * @date: ${nowDate}
+    * @since 1.0.0
+    */
+    public String save${table.className}(String paramJSON) {
+        // 参数校验
+        ValidateResult<${table.className}Entity> validateResult = paramCheckLogic.checkParamValidate(paramJSON, ${table.className}Entity.class);
+        if (!validateResult.isSuccess()) {
+            return validateResult.getDto().toJsonString();
+        }
+
+        ${table.className}Entity saveRequest = validateResult.getResultObj();
+
+        // 更新数据
+        int addCount = ${table.classNameFirstLower}Service.add(saveRequest);
+
+        // 返回结果
+        DataTransferObject dto = new DataTransferObject();
+        dto.putValue("data", addCount);
+        return dto.toJsonString();
+    }
+}

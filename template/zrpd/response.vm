@@ -1,0 +1,40 @@
+package ${table.packageName}.${module}.dto.response;
+
+import java.util.Date;
+
+/**
+ * ${table.className}实体
+ * @author: ${author}
+ * @email:  ${mail}
+ * @date:   ${nowDate}
+ * @since 1.0.0
+ */
+public class ${table.className}Response {
+	
+#foreach( $tempColumn in $table.columnList)
+#if(${tempColumn.fieldType}=="Date")
+	//@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")   
+	//${tempColumn.columnComment.trim()}
+	@DateTimeFormat(pattern="yyyy-MM-dd")   
+	private ${tempColumn.fieldType} ${tempColumn.columnName};
+#end
+#if(${tempColumn.fieldType}!="Date")
+	//${tempColumn.columnComment.trim()}
+	private ${tempColumn.fieldType} ${tempColumn.columnName};
+#end	
+#end
+
+	
+#foreach( $tempColumn in $table.columnList )
+#if(${tempColumn.fieldType}=="Date")
+#end
+	public ${tempColumn.fieldType} ${tempColumn.fieldGetMethod}() {
+		return ${tempColumn.columnName};
+	}
+
+	public void ${tempColumn.fieldSetMehtod}(${tempColumn.fieldType} ${tempColumn.columnName}) {
+		this.${tempColumn.columnName} = ${tempColumn.columnName};
+	}
+	
+#end
+}

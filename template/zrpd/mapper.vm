@@ -1,0 +1,109 @@
+## Mapper文件
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="${table.packageName}.${module}.dao.${table.className}Dao">
+    <resultMap id="resultMap" type="${table.packageName}.entity.${table.className}Entity">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        #foreach($tempColumn in $table.columnList)
+            #if(${tempColumn.columnName}!="id")
+                <result column="${tempColumn.columnRName}" property="${tempColumn.fieldName}"/>
+            #end
+        #end
+    </resultMap>
+
+    <!-- 表字段 -->
+    <sql id="selectField">
+        #foreach( $tempColumn in $table.columnList)
+            ${tempColumn.columnRName}#if(!$foreach.last),#end #end
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="whereSql">
+        #foreach( $tempColumn in $table.columnList)
+            #if(${tempColumn.fieldType}=='String')
+            <if test="${tempColumn.fieldName} != null and ${tempColumn.fieldName} !='' ">
+            #else
+            <if test="${tempColumn.fieldName} != null  ">
+            #end
+            and
+            ${tempColumn.columnRName} = #{${tempColumn.fieldName}}
+        </if>
+        #end
+    </sql>
+
+    <!-- 根据ID获取对象信息 -->
+    <select id="findById" resultMap="resultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="selectField"/>
+        from ${table.tableName}
+        where id = #{id}
+    </select>
+
+    <select id="findByLogicCode" resultMap="resultMap" parameterType="java.lang.String">
+        select
+        <include refid="selectField"/>
+        from ${table.tableName}
+        where logic_code = #{logicCode}
+    </select>
+
+    <!-- 根据条件获取对象集合信息 -->
+    <select id="findForPage" resultMap="resultMap" parameterType="map">
+        select
+        <include refid="selectField"/>
+        from ${table.tableName}
+        where 1=1
+        <include refid="whereSql"/>
+    </select>
+
+    <!-- 保存对象 -->
+    <insert id="save" parameterType="${table.packageName}.entity.${table.className}Entity" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into ${table.tableName}
+        (#foreach( $tempColumn in $table.columnList)${tempColumn.columnRName}#if(!$foreach.last),#end#end)
+        values (#foreach( $tempColumn in $table.columnList)#{${tempColumn.fieldName}}#if(!$foreach.last),#end#end)
+    </insert>
+
+    <!-- 更新对象 -->
+    <update id="update" parameterType="${table.packageName}.entity.${table.className}Entity">
+        update ${table.tableName}
+        set
+        #foreach( $tempColumn in $table.columnList)
+            #if(${tempColumn.columnName}!="id")
+                #if(${tempColumn.fieldType}=='String')
+                <if test="${tempColumn.fieldName} != null and ${tempColumn.fieldName} !='' ">
+                #else
+                <if test="${tempColumn.fieldName} != null  ">
+                #end
+                ${tempColumn.columnRName} = #{${tempColumn.fieldName}}
+                #if(!$foreach.last),#end
+            </if>
+            #end#end
+        <where>
+            <choose>
+                <when test="logicCode !=null and logicCode!='' ">
+                    and logic_code=#{logicCode}
+                </when>
+                <otherwise>
+                    and id = #{id}
+                </otherwise>
+            </choose>
+        </where>
+    </update>
+
+    <!-- 删除对象 -->
+    <update id="delete" parameterType="${table.packageName}.entity.${table.className}Entity">
+        update ${table.tableName}
+        set
+        is_del = 1
+        <where>
+            <choose>
+                <when test="logicCode !=null and logicCode!='' ">
+                    and logic_code=#{logicCode}
+                </when>
+                <otherwise>
+                    and id = #{id}
+                </otherwise>
+            </choose>
+        </where>
+    </update>
+</mapper>

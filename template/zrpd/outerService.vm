@@ -1,0 +1,12 @@
+package ${table.packageName}.${module}.api.outer;
+
+/**
+ * ${table.className}服务接口
+ * @author: ${author}
+ * @email:  ${mail}
+ * @date:   ${nowDate}
+ * @since 1.0.0
+ */
+public interface ${table.className}OuterService {
+
+}

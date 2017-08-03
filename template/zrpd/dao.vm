@@ -1,0 +1,45 @@
+package ${table.packageName}.${module}.dao;
+
+import com.asura.framework.base.paging.PagingResult;
+import com.asura.framework.dao.mybatis.base.MybatisDaoContext;
+import com.asura.framework.dao.mybatis.paginator.domain.PageBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+import java.util.Map;
+import ${table.packageName}.commons.base.BaseDao;
+import ${table.packageName}.entity.${table.className}Entity;
+
+/**
+ * ${shuoming}数据接口
+ * @author: ${author}
+ * @email:  ${mail}
+ * @date:   ${nowDate}
+ * @since 1.0.0
+ */
+@Repository("${module}.${table.classNameFirstLower}Dao")
+public class ${table.className}Dao extends BaseDao<${table.className}Entity> {
+    @Autowired
+    @Qualifier("${module}.mysql.MybatisDaoContext")
+    private MybatisDaoContext mybatisDaoContext;
+
+    @Override
+    public MybatisDaoContext getMybatisDaoContext() {
+        return mybatisDaoContext;
+    }
+
+	/**
+	 * 添加sql供参照的方法，开发完成请删除此方法
+	 * @param whereMap
+	 * @return
+	 * @author: ${author}
+	 * @email:  ${mail}
+	 * @date:   ${nowDate}
+	 * @since 1.0.0
+    public List<${table.className}Entity> find${table.className}List(${table.className}Request searchRequest) {
+        SearchMap<${table.className}Request> searchMap = new SearchMap<>();
+        searchMap.put(BaseConst.SEARCH_CONDITION_NAME, searchRequest);
+        return this.selectOne("find${table.className}List", searchMap);
+    }*/
+}

@@ -1,0 +1,45 @@
+package ${table.packageName}.${module}.service;
+
+import org.springframework.stereotype.Service;
+import com.asura.framework.base.paging.SearchMap;
+import com.asura.framework.dao.mybatis.paginator.domain.PageBounds;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+import ${table.packageName}.commons.constant.BaseConst;
+import ${table.packageName}.commons.base.BaseDao;
+import ${table.packageName}.commons.base.BaseService;
+import ${table.packageName}.${module}.dto.request.${table.className}Request;
+import ${table.packageName}.${module}.dao.${table.className}Dao;
+import ${table.packageName}.entity.${table.className}Entity;
+
+/**
+ * ${table.className}业务接口
+ * @author: ${author}
+ * @email:  ${mail}
+ * @date: ${nowDate}
+ * @since 1.0.0
+ */
+@Service("${module}.${table.classNameFirstLower}Service")
+public class ${table.className}Service extends BaseService<${table.className}Entity> {
+    @Resource(name = "${module}.${table.classNameFirstLower}Dao")
+    private ${table.className}Dao ${table.classNameFirstLower}Dao;
+
+    @Override
+    public BaseDao<${table.className}Entity> getDao() {
+        return ${table.classNameFirstLower}Dao;
+    }
+
+	/**
+	 * 添加sql供参照的方法，开发完成请删除此方法
+	 * @param whereMap
+	 * @return
+	 * @author: ${author}
+	 * @email: ${mail}
+	 * @date: ${nowDate}
+	 * @since 1.0.0
+    public List<${table.className}Entity> find${table.className}List(${table.className}Request searchReq) {
+        return ${table.classNameFirstLower}Dao.find${table.className}List(searchMap);
+    }*/
+}

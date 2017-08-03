@@ -1,0 +1,41 @@
+package ${table.packageName}.${table.classNameFirstLower}.service;
+
+import com.asura.framework.base.entity.DataTransferObject;
+import ${table.packageName}.${module}.dto.request.${table.className}Request;
+import ${table.packageName}.entity.${table.className}Entity;
+
+/**
+ * ${table.className}服务类
+ * @author: ${author}
+ * @email:  ${mail}
+ * @date: ${nowDate}
+ * @since 1.0.0
+ */
+public interface I${table.className}Service{
+
+    /**
+    * 获取${table.className}分页数据
+    *
+    * @param
+    * @return
+    */
+    public DataTransferObject findForPage(${table.className}Request searchReq) throws Exception;
+
+    /**
+    * ${table.className}保存数据
+    * @author: ${author}
+    * @email:  ${mail}
+    * @date: ${nowDate}
+    * @since 1.0.0
+    */
+    public DataTransferObject save${table.className}(${table.className}Entity saveReq) throws Exception;
+
+    /**
+    * ${table.className}更新数据服务
+    * @author: ${author}
+    * @email:  ${mail}
+    * @date: ${nowDate}
+    * @since 1.0.0
+    */
+    public DataTransferObject update${table.className}(${table.className}Entity editReq) throws Exception;
+}

@@ -1,0 +1,135 @@
+package ${table.packageName}.${table.classNameFirstLower}.controller;
+
+import javax.annotation.Resource;
+
+import com.asura.framework.base.entity.DataTransferObject;
+import com.asura.framework.base.util.JsonEntityTransform;
+import ${table.packageName}.commons.dto.HttpResponseDto;
+import com.ziroom.zrpd.base.dto.request.ProductRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ${table.packageName}.${table.classNameFirstLower}.service.I${table.className}Service;
+import ${table.packageName}.entity.${table.className}Entity;
+
+/**
+ * 
+ * ${table.className}控制器
+ * @author: ${author}
+ * @email:  ${mail}
+ * @date:   ${nowDate}
+ * @since 1.0.0
+ */
+@Controller
+@RequestMapping(value = "/${table.className}")
+public class ${table.className}Controller {
+
+	/** 日志 */
+    private static Logger LOGGER = LoggerFactory.getLogger(${table.className}Controller.class);
+	
+	@Resource
+	private I${table.className}Service ${table.classNameFirstLower}Service;
+
+    /**
+    * 获取${table.className}分页数据
+    *
+    * @param
+    * @return
+    */
+    @RequestMapping(value = "findForPage")
+    @ResponseBody
+    public String findForPage(${table.className}Request ${table.classNameFirstLower}Request, int start, int length) {
+        LOGGER.info("进入查找标签小类列表方法|${table.classNameFirstLower}Request|" + ${table.classNameFirstLower}Request.toString());
+        try {
+            if (length <= 0) {
+                length = 10;
+            }
+            int page = start / length + 1;
+            if (productRequest == null) {
+            productRequest = new ProductRequest();
+            }
+            //分页
+            productRequest.setPage(page);
+            productRequest.setPageSize(length);
+
+            // 查询结果
+            DataTransferObject dto = productService.findForPage(productRequest);
+            // 将查询条件设置回页面，需要时打开 TODO
+            // dto.putValue("search", productRequest);
+
+            return JsonEntityTransform.Object2Json(dto.getData());
+        } catch (Exception e) {
+            LOGGER.error("查询${table.className}列表异常", e);
+            return JsonEntityTransform.Object2Json(HttpResponseDto.responseFail("查询${table.className}列表异常"));
+        }
+    }
+
+    /**
+    * 更新${table.className}
+    *
+    * @param
+    * @return
+    */
+    @RequestMapping(value = "edit")
+    @ResponseBody
+    public String edit(${table.className}Entity editReq) {
+        LOGGER.info("进入${table.className}编辑页面");
+        try {
+            //参数校验
+            if (editReq.getId() == null) {
+                return JsonEntityTransform.Object2Json(HttpResponseDto.responseFail("${table.className}更新时id为空"));
+            }
+            // 业务check
+            //DataTransferObject checkDto = ${table.className}Process.checkEditTagParam(editReq);
+            //if (checkDto.getCode() == Integer.parseInt(HttpResponseDto.FAILED)) {
+            //    return JsonEntityTransform.Object2Json(HttpResponseDto.responseFail(checkDto.getMsg()));
+            //}
+
+            DataTransferObject dto = ${table.classNameFirstLower}Service.update${table.className}(editReq);
+            if (dto.getCode() == Integer.parseInt(HttpResponseDto.SUCCESS)) {
+                return JsonEntityTransform.Object2Json(HttpResponseDto.responseOK(null));
+            } else {
+                return JsonEntityTransform.Object2Json(HttpResponseDto.responseFail("编辑${table.className}异常"));
+            }
+        } catch (Exception e) {
+            LOGGER.error("编辑${table.className}异常", e);
+            DataTransferObject dto = new DataTransferObject();
+            dto.setErrCode(Integer.parseInt(HttpResponseDto.FAILED));
+            return JsonEntityTransform.Object2Json(dto);
+        }
+    }
+
+    /**
+    * 保存${table.className}
+    *
+    * @param
+    * @return
+    */
+    @RequestMapping(value = "save")
+    @ResponseBody
+    public String save(${table.className}Entity saveReq) {
+        LOGGER.info("进入${table.className}保存页面");
+        try {
+            // 业务check
+            //DataTransferObject checkDto = ${table.className}Process.checkSaveTagParam(saveReq);
+            //if (checkDto.getCode() == Integer.parseInt(HttpResponseDto.FAILED)) {
+            //    return JsonEntityTransform.Object2Json(HttpResponseDto.responseFail(checkDto.getMsg()));
+            //}
+
+            DataTransferObject dto = ${table.classNameFirstLower}Service.save${table.className}(saveReq);
+            if (dto.getCode() == Integer.parseInt(HttpResponseDto.SUCCESS)) {
+                return JsonEntityTransform.Object2Json(HttpResponseDto.responseOK(null));
+            } else {
+                return JsonEntityTransform.Object2Json(HttpResponseDto.responseFail("保存${table.className}异常"));
+            }
+        } catch (Exception e) {
+            LOGGER.error("保存${table.className}异常", e);
+            DataTransferObject dto = new DataTransferObject();
+            dto.setErrCode(Integer.parseInt(HttpResponseDto.FAILED));
+            return JsonEntityTransform.Object2Json(dto);
+        }
+    }
+}

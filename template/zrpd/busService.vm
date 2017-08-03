@@ -1,0 +1,90 @@
+package ${table.packageName}.${table.classNameFirstLower}.service.impl;
+
+import com.asura.framework.base.entity.DataTransferObject;
+import com.asura.framework.base.paging.PagingResult;
+import com.asura.framework.base.util.JsonEntityTransform;
+import com.asura.framework.base.util.SOAResParseUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+import ${table.packageName}.${module}.api.inner.${table.className}InnerService;
+import ${table.packageName}.${module}.dto.request.${table.className}Request;
+import ${table.packageName}.${table.classNameFirstLower}.service.I${table.className}Service;
+import ${table.packageName}.entity.${table.className}Entity;
+
+/**
+ * ${table.className}服务类
+ * @author: ${author}
+ * @email:  ${mail}
+ * @date: ${nowDate}
+ * @since 1.0.0
+ */
+@Service(value = "${module}.${table.classNameFirstLower}ServiceImpl")
+public class ${table.className}ServiceImpl  implements I${table.className}Service{
+private final static Logger LOGGER = LoggerFactory.getLogger(${table.className}ServiceImpl.class);
+
+    @Resource(name = "zrpd.${module}.${table.classNameFirstLower}InnerService")
+    private ${table.className}InnerService ${table.classNameFirstLower}InnerService;
+
+    /**
+    * 获取${table.className}分页数据
+    *
+    * @param
+    * @return
+    */
+    @Override
+    public DataTransferObject findForPage(${table.className}Request searchReq) throws Exception{
+        String soaReturn= ${table.classNameFirstLower}InnerService.findForPage(JsonEntityTransform.Object2Json(searchReq));
+        if(SOAResParseUtil.checkSOAReturnSuccess(soaReturn)){
+            LOGGER.info("soa返回结果-->"+soaReturn);
+
+            PagingResult<${table.className}Entity> pagingResult = SOAResParseUtil.getValueFromDataByKey(soaReturn,"data", PagingResult.class);
+
+            DataTransferObject dataTransferObject=new DataTransferObject();
+            dataTransferObject.putValue("data",pagingResult.getRows());
+            dataTransferObject.putValue("recordsTotal",pagingResult.getTotal());
+            dataTransferObject.putValue("recordsFiltered",pagingResult.getTotal());
+            return  dataTransferObject;
+        }else {
+            throw new  Exception("获取${table.className}失败");
+        }
+    }
+
+    /**
+    * ${table.className}保存数据
+    * @author: ${author}
+    * @email:  ${mail}
+    * @date: ${nowDate}
+    * @since 1.0.0
+    */
+    @Override
+    public DataTransferObject save${table.className}(${table.className}Entity saveReq) throws Exception {
+        String soaReturn = ${table.classNameFirstLower}InnerService.save${table.className}(JsonEntityTransform.Object2Json(saveReq));
+        if(SOAResParseUtil.checkSOAReturnSuccess(soaReturn)){
+            return new DataTransferObject();
+        }else {
+            throw new Exception("保存产品标签失败");
+        }
+    }
+
+    /**
+    * ${table.className}更新数据服务
+    * @author: ${author}
+    * @email:  ${mail}
+    * @date: ${nowDate}
+    * @since 1.0.0
+    */
+    @Override
+    public DataTransferObject update${table.className}(${table.className}Entity editReq) throws Exception {
+        String soaReturn= ${table.classNameFirstLower}InnerService.update${table.className}(JsonEntityTransform.Object2Json(editReq));
+        if(SOAResParseUtil.checkSOAReturnSuccess(soaReturn)){
+            return  new DataTransferObject();
+        }else {
+            throw  new Exception("编辑产品标签失败");
+        }
+    }
+}

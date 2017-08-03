@@ -1,0 +1,174 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!-- maven2.0必须是这样写，现在是maven2唯一支持的版本 -->
+  <modelVersion>4.0.0</modelVersion>
+  <!-- 指定组名,例如：org.apache.maven -->
+  <groupId>cn.javaee</groupId>
+  <!-- 指定工程名例如：appfuse -->
+  <artifactId>ZRFinance</artifactId>
+  <!-- 指定版本号 格式为:主版本.次版本.增量版本-限定版本号 -->
+  <version>0.0.1-SNAPSHOT</version>
+  <!-- 项目产生的构件类型，例如jar、war、ear、pom。插件可以创建他们自己的构件类型，所以前面列的不是全部构件类型 -->
+  <packaging>war</packaging>
+  <!-- 项目的名称, Maven产生的文档用 -->
+  <name>ZRFinance</name>
+  <!-- 项目的详细描述 -->
+  <description/>
+  
+  <profiles>
+		<!-- 不同的打包环境 -->
+		<!-- 开发环境，默认激活 -->
+		<profile>
+			<id>dev</id>
+			<properties>
+				<env>dev</env>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault><!--默认启用的是dev环境配置 -->
+			</activation>
+		</profile>
+		<!-- 生产环境 -->
+		<profile>
+			<id>production</id>
+			<properties>
+				<env>production</env>
+			</properties>
+		</profile>
+		<!-- 测试环境 -->
+		<profile>
+			<id>test</id>
+			<properties>
+				<env>test</env>
+			</properties>
+		</profile>
+	</profiles>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- 配置引入版本号 -->
+    <java-version>1.7</java-version>  
+    <javaee-api-version>7.0</javaee-api-version>
+    <org.log4j-version>1.2.17</org.log4j-version>
+	<mysql-version>5.1.36</mysql-version>
+	<commons-lang3-version>3.4</commons-lang3-version>
+  </properties>
+  
+  <dependencies>
+	  	<!-- javaEE -->
+	    <dependency>
+	      <groupId>javax</groupId>
+	      <artifactId>javaee-api</artifactId>
+	      <version>${javaee-api-version}</version>
+	      <scope>provided</scope>
+	    </dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>${commons-lang3-version}</version>
+		</dependency>
+		<!-- Oracle驱动 -->
+		<dependency>  
+		    <groupId>com.oracle</groupId>  
+		    <artifactId>ojdbc14</artifactId>  
+		    <version>10.2.0.1.0</version>  
+		</dependency>
+	
+		<!-- Mysql驱动 -->
+	  	<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>${mysql-version}</version>
+		</dependency>
+		
+		<dependency>
+	    <groupId>log4j</groupId>
+	    <artifactId>log4j</artifactId>
+	    <version>${org.log4j-version}</version>
+	    <exclusions> 
+                <exclusion>  
+                    <groupId>javax.jms</groupId>  
+                    <artifactId>jms</artifactId>  
+                </exclusion>  
+                <exclusion>  
+                    <groupId>com.sun.jdmk</groupId>  
+                    <artifactId>jmxtools</artifactId>  
+                </exclusion>  
+                <exclusion>  
+                    <groupId>com.sun.jmx</groupId>  
+                    <artifactId>jmxri</artifactId>  
+                </exclusion>  
+            </exclusions>  
+            <scope>compile</scope>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.apache.velocity</groupId>
+	    <artifactId>velocity</artifactId>
+	    <version>1.7</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.apache.velocity.tools</groupId>
+	    <artifactId>velocity-tools</artifactId>
+	    <version>2.0-alpha1</version>
+	</dependency>
+  </dependencies>
+  
+  
+  <build>
+  		<finalName>ZRFinance</finalName>
+	
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java-version}</source>
+					<target>${java-version}</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.5</version>
+				<!-- <configuration>
+					<warSourceExcludes>${warExcludes}</warSourceExcludes>
+				</configuration> -->
+			</plugin>
+			
+			<!-- 在测试阶段使用的插件的构建生命周期来执行应用程序的单元测试插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.16</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			
+			<!-- 打包工程源码插件 -->
+			<plugin>
+				<inherited>true</inherited>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- 打包工程源码设置字符编码 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+  </build>
+</project>

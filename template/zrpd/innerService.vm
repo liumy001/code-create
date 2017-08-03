@@ -1,0 +1,37 @@
+package ${table.packageName}.${module}.api.inner;
+
+/**
+ * ${table.className}服务接口
+ * @author: ${author}
+ * @email:  ${mail}
+ * @date:   ${nowDate}
+ * @since 1.0.0
+ */
+public interface ${table.className}InnerService {
+    /**
+    * ${table.className}查询数据服务
+    * @author: ${author}
+    * @email:  ${mail}
+    * @date: ${nowDate}
+    * @since 1.0.0
+    */
+    public String findForPage(String json);
+
+    /**
+    * ${table.className}更新数据服务
+    * @author: ${author}
+    * @email:  ${mail}
+    * @date: ${nowDate}
+    * @since 1.0.0
+    */
+    public String update${table.className}(String paramJSON);
+
+    /**
+    * ${table.className}保存数据服务
+    * @author: ${author}
+    * @email:  ${mail}
+    * @date: ${nowDate}
+    * @since 1.0.0
+    */
+    public String save${table.className}(String paramJSON);
+}
