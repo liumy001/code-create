@@ -1,6 +1,6 @@
 package ${table.packageName}.entity;
 
-import com.asura.framework.base.entity.BaseEntity;
+import com.tezign.operator.entity.BaseEntity;
 
 
 /**
