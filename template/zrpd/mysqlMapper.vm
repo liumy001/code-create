@@ -90,14 +90,7 @@
             </if>
             #end#end
         <where>
-            <choose>
-                <when test="logicCode !=null and logicCode!='' ">
-                    and logic_code=#{logicCode}
-                </when>
-                <otherwise>
-                    and id = #{id}
-                </otherwise>
-            </choose>
+            and id = #{id}
         </where>
     </update>
 
@@ -105,7 +98,7 @@
     <update id="delete" parameterType="${table.packageName}.entity.${table.className}Entity">
         update ${table.tableName}
         set
-        is_del = 1
+        status = 1
         <where>
             and id = #{id}
         </where>
