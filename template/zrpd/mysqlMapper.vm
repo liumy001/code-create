@@ -61,14 +61,14 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             #foreach( $tempColumn in $table.columnList)
                 <if test="${tempColumn.fieldName} != null">
-                    ${tempColumn.columnRName}
+                    ${tempColumn.columnRName} ,
                 </if>
             #end
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             #foreach( $tempColumn in $table.columnList)
                 <if test="${tempColumn.fieldName} != null">
-                    #{${tempColumn.fieldName}}
+                    #{${tempColumn.fieldName}}  ,
                 </if>
             #end
         </trim>
@@ -107,14 +107,7 @@
         set
         is_del = 1
         <where>
-            <choose>
-                <when test="logicCode !=null and logicCode!='' ">
-                    and logic_code=#{logicCode}
-                </when>
-                <otherwise>
-                    and id = #{id}
-                </otherwise>
-            </choose>
+            and id = #{id}
         </where>
     </update>
 </mapper>
