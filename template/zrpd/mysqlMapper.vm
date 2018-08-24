@@ -77,7 +77,7 @@
     <!-- 更新对象 -->
     <update id="update" parameterType="${table.packageName}.entity.${table.className}Entity">
         update ${table.tableName}
-        set
+        <set>
         #foreach( $tempColumn in $table.columnList)
             #if(${tempColumn.columnName}!="id")
                 #if(${tempColumn.fieldType}=='String')
@@ -89,6 +89,7 @@
                 #if(!$foreach.last),#end
             </if>
             #end#end
+        </set>
         <where>
             and id = #{id}
         </where>
